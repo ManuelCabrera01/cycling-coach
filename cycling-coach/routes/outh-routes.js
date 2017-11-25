@@ -33,25 +33,29 @@ router.post('/signup',(reg, res, next)=>{
 });//GET/signup
 
 
-router.post('/loging',(req, res, next )=>{
-  const username=req.bodyusername;
-  const password=req.body.pasword;
+router.post('/login', (req, res, next )=> {
+  const username = req.body.username;
+   const password = req.body.password;
 
-  User.foundOne({usernmae: username},(err, foundUser)=>{
-    User.findOne ({username: username }, (err, foundUser)=> {
-if (!foundUser ){
-  res.status(400).json({message: 'incorrect username'});
-  return;
-}
-if (!bcrypt.compareSync(password, foundUser.password)) {
-  res.status(400).json({massage:"incorretc pasword"});
-  return;
-}
-req.login(foundUser, (err) => {
-  foundUser.password = undefined;
-  res.status(200).json(foundUser);
-});
+   User.findOne ({username: username }, (err, foundUser)=> {
+     if (!foundUser ){
+       res.status(400).json({message: 'incorrect username'});
+       return;
+
+     }
+
+     if (!bcrypt.compareSync(password, foundUser.password)) {
+       res.status(400).json({massage:"incorretc pasword"});
+       return;
+     }
+     req.login(foundUser, (err) => {
+       foundUser.password = undefined;
+       res.status(200).json(foundUser);
+     });
+      });
+        });
+
+  router.post('/logout', (req, res, next) => {
+    req.logout();
+    res.status(200).json({ message: 'Success' });
   });
-    });
-
-})
