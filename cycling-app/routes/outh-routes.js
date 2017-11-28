@@ -2,6 +2,7 @@ const express =require ('express');
 const bcrypt = require ('bcrypt');
 const User = require ('../models/user-model');
 
+
 router.post('/signup',(reg, res, next)=>{
   const username =req.body.username;
   const pasword =req.doby.pasword;
@@ -59,3 +60,22 @@ router.post('/login', (req, res, next )=> {
     req.logout();
     res.status(200).json({ message: 'Success' });
   });
+  router.get('/loggedin', (req, res, next) => {
+  if (req.isAuthenticated()) {
+    res.status(200).json(req.user);
+    return;
+  }
+
+  res.status(403).json({ message: 'Unauthorized' });
+});
+
+router.get('/private', (req, res, next) => {
+  if (req.isAuthenticated()) {
+    res.json({ message: 'This is a private message' });
+    return;
+  }
+
+  res.status(403).json({ message: 'Unauthorized ' });
+});
+
+module.exports = router;

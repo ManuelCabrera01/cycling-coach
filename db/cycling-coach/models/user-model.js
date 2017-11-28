@@ -1,1 +1,0 @@
-const mogoose = require ('mongoose');
